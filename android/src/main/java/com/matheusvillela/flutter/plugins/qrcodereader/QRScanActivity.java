@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.view.View;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 
@@ -41,7 +42,14 @@ public class QRScanActivity extends Activity implements QRCodeReaderView.OnQRCod
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_read);
-        view = (QRCodeReaderView) findViewById(R.id.activity_qr_read_reader);
+
+        setupCameraView();
+        setupCancelButton();
+
+    }
+
+    private void setupCameraView() {
+        view = findViewById(R.id.activity_qr_read_reader);
         Intent intent = getIntent();
         view.setOnQRCodeReadListener(this);
         view.setQRDecodingEnabled(true);
@@ -50,6 +58,17 @@ public class QRScanActivity extends Activity implements QRCodeReaderView.OnQRCod
         }
         view.setAutofocusInterval(intent.getIntExtra(EXTRA_FOCUS_INTERVAL, 2000));
         view.setTorchEnabled(intent.getBooleanExtra(EXTRA_TORCH_ENABLED, false));
+    }
+
+    private void setupCancelButton() {
+        findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
+                finish();
+            }
+        });
     }
 
     @Override

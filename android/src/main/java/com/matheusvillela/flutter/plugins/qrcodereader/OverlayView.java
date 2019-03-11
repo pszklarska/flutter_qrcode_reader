@@ -3,22 +3,19 @@ package com.matheusvillela.flutter.plugins.qrcodereader;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Xfermode;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 public class OverlayView extends View {
 
-    private int backgroundColor = Color.parseColor("#c718124f");
-    private int lineColor = Color.parseColor("#6cfcff");
+    private int backgroundColor = ContextCompat.getColor(getContext(), R.color.backgroundColor);
+    private int lineColor = ContextCompat.getColor(getContext(), R.color.lineColor);
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Xfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
@@ -34,24 +31,6 @@ public class OverlayView extends View {
     public OverlayView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int screenWidth = size.x;
-        int screenHeight = size.y;
-
-        left = 50;
-        right = screenWidth - 50;
-
-        int rectWidth = right - left;
-        top = screenHeight / 2 - rectWidth / 2;
-        bottom = top + rectWidth;
-        scannerLineHeight = screenHeight / 2;
-
-        postInvalidate();
-        initAnimation();
     }
 
     @Override
@@ -85,6 +64,39 @@ public class OverlayView extends View {
     }
 
 
+    @Override
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+//        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+//        if (wm == null) return;
+//        Display display = wm.getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int screenWidth = size.x;
+//        int screenHeight = size.y;
+
+//        Log.d("OVERLAY", "screenHeight: " + screenHeight);
+
+//        int height = getMeasuredHeight();
+//        Log.d("OVERLAY", "measuredHeight: " + height);
+
+//        int maxWidth = width;
+//        int maxHeight = height;
+
+        int horizontalMargin = dpToPx(getContext(), 40);
+
+        left = horizontalMargin;
+        right = width - horizontalMargin;
+
+        int rectWidth = right - left;
+        top = height / 2 - rectWidth / 2;
+        bottom = top + rectWidth;
+        scannerLineHeight = height / 2;
+
+        postInvalidate();
+        initAnimation();
+    }
+
     void initAnimation() {
         animator = ValueAnimator.ofInt(top + 20, bottom - 20);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -108,4 +120,17 @@ public class OverlayView extends View {
             animator.cancel();
         }
     }
+
+    private static int dpToPx(final Context context, final float dp) {
+        return (int) (dp * context.getResources().getDisplayMetrics().density);
+    }
+
+//    private static int getColor(Context context, int id) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            return context.getColor(id);
+//        } else {
+//            //noinspection deprecation
+//            return context.getResources().getColor(id);
+//        }
+//    }
 }

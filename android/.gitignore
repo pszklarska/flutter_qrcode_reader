@@ -11,3 +11,5 @@
 /gradlew
 /gradlew.bat
 /tmplibs
+
+src/main/gen
