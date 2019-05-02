@@ -7,10 +7,11 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Xfermode;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+
+import androidx.core.content.ContextCompat;
 
 public class OverlayView extends View {
 
@@ -124,13 +125,4 @@ public class OverlayView extends View {
     private static int dpToPx(final Context context, final float dp) {
         return (int) (dp * context.getResources().getDisplayMetrics().density);
     }
-
-//    private static int getColor(Context context, int id) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            return context.getColor(id);
-//        } else {
-//            //noinspection deprecation
-//            return context.getResources().getColor(id);
-//        }
-//    }
 }

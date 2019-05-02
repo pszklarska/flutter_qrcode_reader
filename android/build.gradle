@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.0'
     }
 }
 
@@ -28,7 +28,7 @@ android {
     buildToolsVersion '28.0.3'
 
     defaultConfig {
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         targetSdkVersion 28
     }
     lintOptions {
@@ -44,7 +44,7 @@ dependencies {
     implementation('com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.2@aar') {
         transitive = true
     }
-    api 'com.android.support:appcompat-v7:28.0.0'
+    api 'androidx.appcompat:appcompat:1.0.2'
 
 //    provided files('tmplibs/flutter.jar')
 }
