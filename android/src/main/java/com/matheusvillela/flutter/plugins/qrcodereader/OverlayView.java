@@ -67,23 +67,6 @@ public class OverlayView extends View {
 
     @Override
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
-//        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-
-//        if (wm == null) return;
-//        Display display = wm.getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        int screenWidth = size.x;
-//        int screenHeight = size.y;
-
-//        Log.d("OVERLAY", "screenHeight: " + screenHeight);
-
-//        int height = getMeasuredHeight();
-//        Log.d("OVERLAY", "measuredHeight: " + height);
-
-//        int maxWidth = width;
-//        int maxHeight = height;
-
         int horizontalMargin = dpToPx(getContext(), 40);
 
         left = horizontalMargin;

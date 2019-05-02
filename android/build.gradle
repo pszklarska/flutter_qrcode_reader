@@ -28,8 +28,9 @@ android {
     buildToolsVersion '28.0.3'
 
     defaultConfig {
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        minSdkVersion 14
         targetSdkVersion 28
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -46,5 +47,4 @@ dependencies {
     }
     api 'androidx.appcompat:appcompat:1.0.2'
 
-//    provided files('tmplibs/flutter.jar')
 }
