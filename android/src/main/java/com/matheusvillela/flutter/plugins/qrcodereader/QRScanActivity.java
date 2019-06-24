@@ -22,16 +22,22 @@ package com.matheusvillela.flutter.plugins.qrcodereader;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.View;
 
-import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class QRScanActivity extends Activity implements QRCodeReaderView.OnQRCodeReadListener {
+import com.google.zxing.ResultPoint;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
+
+import java.util.List;
+
+public class QRScanActivity extends Activity implements BarcodeCallback {
 
     private boolean qrRead;
-    private QRCodeReaderView view;
+    private CompoundBarcodeView view;
 
     public static String EXTRA_RESULT = "extra_result";
 
@@ -51,13 +57,13 @@ public class QRScanActivity extends Activity implements QRCodeReaderView.OnQRCod
     private void setupCameraView() {
         view = findViewById(R.id.activity_qr_read_reader);
         Intent intent = getIntent();
-        view.setOnQRCodeReadListener(this);
-        view.setQRDecodingEnabled(true);
-        if (intent.getBooleanExtra(EXTRA_FORCE_FOCUS, false)) {
-            view.forceAutoFocus();
+        view.decodeContinuous(this);
+        view.setStatusText("");
+        if (intent.getBooleanExtra(EXTRA_TORCH_ENABLED, false)) {
+            view.setTorchOn();
+        } else {
+            view.setTorchOff();
         }
-        view.setAutofocusInterval(intent.getIntExtra(EXTRA_FOCUS_INTERVAL, 2000));
-        view.setTorchEnabled(intent.getBooleanExtra(EXTRA_TORCH_ENABLED, false));
     }
 
     private void setupCancelButton() {
@@ -72,12 +78,24 @@ public class QRScanActivity extends Activity implements QRCodeReaderView.OnQRCod
     }
 
     @Override
-    public void onQRCodeRead(String text, PointF[] points) {
+    protected void onResume() {
+        super.onResume();
+        view.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        view.pause();
+    }
+
+    @Override
+    public void barcodeResult(BarcodeResult result) {
         if (!qrRead) {
             synchronized (this) {
                 qrRead = true;
                 Intent data = new Intent();
-                data.putExtra(EXTRA_RESULT, text);
+                data.putExtra(EXTRA_RESULT, result.getText());
                 setResult(Activity.RESULT_OK, data);
                 finish();
             }
@@ -85,14 +103,7 @@ public class QRScanActivity extends Activity implements QRCodeReaderView.OnQRCod
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        view.startCamera();
-    }
+    public void possibleResultPoints(List<ResultPoint> resultPoints) {
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        view.stopCamera();
     }
 }
